@@ -1,10 +1,17 @@
+
+
+
 /**
  * 
  */
 package org.sudhcha.spring.neo4j;
 
+import java.util.Set;
+
+import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.NodeEntity;
+import org.springframework.data.neo4j.annotation.RelatedTo;
 
 /**
  * @author sudhin
@@ -14,13 +21,27 @@ import org.springframework.data.neo4j.annotation.NodeEntity;
 public class Character {
 	
 	@GraphId
-	Long nodeId;
+	private Long nodeId;
 	
-	String firstName;
+	private String firstName;
 	
-	String lastName;
+	private String lastName;
 	
-	char initial;
+	private char initial;
+	
+	@RelatedTo(type = "COMPANION_OF", direction = Direction.BOTH, elementClass = Character.class)
+	private Set<Character> friends;
+	
+	@RelatedTo(type = "ENEMY_OF", direction = Direction.BOTH, elementClass = Character.class)
+	private Set<Character> enemies;
+
+	public Set<Character> getFriends() {
+		return friends;
+	}
+
+	public void setFriends(Set<Character> friends) {
+		this.friends = friends;
+	}
 
 	public Character() {
 		super();
@@ -65,6 +86,8 @@ public class Character {
 		this.initial = initial;
 	}
 	
+	public void friendOf(Character friend){
+		this.friends.add(friend);
+	}
 	
-
 }
