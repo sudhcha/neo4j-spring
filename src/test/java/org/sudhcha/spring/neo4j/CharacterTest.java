@@ -36,16 +36,24 @@ public class CharacterTest {
 		Character theDoctor = template
 				.save(new Character("William", "Hartnell"));
 		Character susan = template.save(new Character("Susan", "Campbell"));
-		
+
 		theDoctor.friendOf(susan);
 		theDoctor = template.save(theDoctor);
 
 		Character retrievedDoctor = template.findOne(theDoctor.getNodeId(),
 				Character.class);
+		Character retrievedSusan = template.findOne(susan.getNodeId(),
+				Character.class);
+
 		assertEquals("retrieved character first name matches", 1,
 				retrievedDoctor.getFriends().size());
 		assertEquals("retrieved character last name matches", "Hartnell",
 				retrievedDoctor.getLastName());
+		assertEquals(
+				"retrieved correct relationship: ",
+				"COMPANION_OF",
+				template.getRelationshipBetween(retrievedDoctor,
+						retrievedSusan, "COMPANION_OF").getType().name());
 	}
 
 }
